@@ -1,0 +1,8 @@
+---
+- hosts: es_data
+  gather_facts: no
+  tasks:
+    - name: Clean elasticsearch data path
+      file:
+        state: absent
+        path: "{{ dataPath }}/"

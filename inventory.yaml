@@ -1,0 +1,62 @@
+all:
+  hosts:
+  vars:
+    ansible_user: ubuntu
+    gateway: 192.168.0.11
+    esVersion: 7.9.3
+  children:
+    ant_nest:
+      hosts:
+        queenant:
+          ansible_host: 192.168.0.40
+        ant1:
+          ansible_host: 192.168.0.41
+          dataPath: "/data/elasticsearch-data"
+          heapSize: "600m"
+        ant2:
+          ansible_host: 192.168.0.42
+    hive:
+      hosts:
+        queenbee:
+        bee1:
+          ansible_host: 192.168.0.51
+        bee2:
+          ansible_host: 192.168.0.52
+        bee3:
+          ansible_host: 192.168.0.53
+        bee4:
+          ansible_host: 192.168.0.54
+        bee5:
+          ansible_host: 192.168.0.55
+      children:
+        admin:
+          hosts:
+            queenbee:
+        es:
+          vars:
+            seedHosts: "bee3,bee4,bee5"
+          children:
+            es_master:
+              vars:
+                heapSize: "2048m"
+                nodeRoles: "master"
+                initMasterNodes: "bee3,bee4,bee5"
+              hosts:
+                bee3:
+                bee4:
+                bee5:
+            es_data:
+              vars:
+                dataPath: "~/elasticsearch-data"
+                heapSize: "4096m"
+                nodeRoles: "data,ingest"
+                clearData: yes
+              hosts:
+                bee1:
+                bee2:
+    protos:
+      hosts:
+        proto:
+          ansible_host: 192.168.0.177
+          newName: ant2
+          newIp: 192.168.0.42

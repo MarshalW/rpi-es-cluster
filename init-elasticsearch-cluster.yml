@@ -1,0 +1,10 @@
+---
+- hosts: es_master
+  gather_facts: no
+  roles:
+    - { role: setup-elasticsearch-cluster }
+
+- hosts: es_data
+  gather_facts: no
+  roles:
+    - { role: setup-elasticsearch-cluster }

@@ -1,0 +1,6 @@
+---
+# 初始化proto，设置主机名和ip地址
+- hosts: proto
+  gather_facts: no
+  roles:
+    - { role: init-proto }

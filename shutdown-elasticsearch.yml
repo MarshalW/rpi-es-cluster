@@ -1,0 +1,8 @@
+---
+- hosts: es
+  gather_facts: no
+  tasks:
+    - name: "Shutdown elasticsearch service"
+      shell: |
+        cd projects/es/
+        docker-compose down

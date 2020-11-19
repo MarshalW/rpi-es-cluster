@@ -1,0 +1,6 @@
+server.name: kibana
+server.host: "0"
+elasticsearch.hosts:
+{% for item in groups['es'] %}
+  - http://{{ hostvars[item]['inventory_hostname'] }}:9200
+{% endfor %}

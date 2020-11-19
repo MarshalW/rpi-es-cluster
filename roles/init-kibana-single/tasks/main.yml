@@ -1,0 +1,17 @@
+---
+- name: Clear kibana directory
+  file:
+    path: ~/projects/es
+    state: absent
+- name: Create kibana directory
+  file:
+    path: ~/projects/es/kibana
+    state: directory
+- name: Generate docker-compose.yml
+  template:
+    src: "{{ role_path }}/files/docker-compose.yml.j2"
+    dest: "~/projects/es/kibana/docker-compose.yml"
+- name: Generate config.yml
+  template:
+    src: "{{ role_path }}/files/config.yml.j2"
+    dest: "~/projects/es/kibana/config.yml"

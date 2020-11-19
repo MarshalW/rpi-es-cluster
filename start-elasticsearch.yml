@@ -1,0 +1,16 @@
+---
+- hosts: es_master
+  gather_facts: no
+  tasks:
+    - name: "Start up elasticsearch master service"
+      shell: |
+        cd projects/es/
+        docker-compose up -d
+
+- hosts: es_data
+  gather_facts: no
+  tasks:
+    - name: "Start up elasticsearch data service"
+      shell: |
+        cd projects/es/
+        docker-compose up -d

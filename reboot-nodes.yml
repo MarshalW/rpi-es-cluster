@@ -1,0 +1,7 @@
+---
+- hosts: nodes
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Unconditionally reboot the machine with all defaults
+      reboot:

@@ -1,0 +1,37 @@
+---
+- name: Clear elasticsearch directory
+  file:
+    path: ~/projects/es
+    state: absent
+- name: Create elasticsearch directory
+  file:
+    path: ~/projects/es/elasticsearch
+    state: directory
+- name: Clear elasticsearch data directory
+  when: clearData|default(false) == true
+  file:
+    path: "{{dataPath}}"
+    state: absent
+- name: Create elasticsearch data directory
+  when: dataPath|default('', true) | trim != ''
+  file:
+    path: "{{dataPath}}"
+    state: directory
+- name: Generate docker-compose.yml
+  template:
+    src: "{{ role_path }}/files/docker-compose.yml.j2"
+    dest: "~/projects/es/docker-compose.yml"
+- name: Generate config.yml
+  template:
+    src: "{{ role_path }}/files/config.yml.j2"
+    dest: "~/projects/es/elasticsearch/config.yml"
+# 防止elasticsearch exit 78, https://github.com/laradock/laradock/issues/1699
+# 有效的设置，https://stackoverflow.com/a/54140948/3483986
+# 参见：https://docs.actian.com/vector/4.2/index.html#page/User/Increase_max_map_count_Kernel_Parameter_(Linux).htm
+# mmap的上限，上述说明每单位约128KB内存， 262144相当于32GB，一般足够了
+# cat /proc/sys/vm/max_map_count 检查
+- name: Set max_map_count
+  become: yes
+  shell: |
+    echo 'vm.max_map_count=262144' >>/etc/sysctl.conf
+    sysctl -p

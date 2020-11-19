@@ -1,0 +1,5 @@
+---
+- hosts: queenant
+  gather_facts: no
+  roles:
+    - { role: init-kibana-single }

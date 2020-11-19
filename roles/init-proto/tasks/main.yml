@@ -1,0 +1,21 @@
+---
+- include_role:
+    name: change-host-name
+- name: Set static ip address
+  become: yes
+  shell: |
+    true>/etc/netplan/00-installer-config.yaml
+    cat >>/etc/netplan/00-installer-config.yaml  <<EOF
+    network: 
+        version: 2
+        renderer: networkd
+        ethernets: 
+            eth0: 
+                addresses: [{{newIp}}/24]
+                dhcp4: no
+                gateway4: {{gateway}}
+                nameservers: 
+                    addresses: [{{gateway}}]
+    EOF
+    mv /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml.bak
+    timeout 5s netplan apply

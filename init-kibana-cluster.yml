@@ -1,0 +1,5 @@
+---
+- hosts: admin
+  gather_facts: no
+  roles:
+    - { role: init-kibana-cluster }

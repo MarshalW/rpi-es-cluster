@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  kibana:
+    image: kibana-rpi:{{esVersion}}
+    container_name: kibana
+    network_mode: "host"
+    volumes:
+      - ./config.yml:/usr/share/kibana/config/kibana.yml
